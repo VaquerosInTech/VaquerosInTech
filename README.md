@@ -2,7 +2,7 @@
 
 A social networking platform designed to connect and empower computer science students at UTRGV, fostering community, mentorship, and collaboration within our vibrant Hispanic tech community.
 
-## 🌟 About
+##  About
 
 VaquerosInTech is more than just a social app – it's a bridge connecting aspiring technologists in the Rio Grande Valley. Built specifically for UTRGV computer science students, our platform celebrates the rich Hispanic heritage of our community while providing essential tools for academic and professional growth.
 
