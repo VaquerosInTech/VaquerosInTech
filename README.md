@@ -32,7 +32,7 @@ To create an inclusive digital space where students can:
 - Event announcements and networking opportunities
 
 ###  Women in Tech Chapter
-*Dedicated space supporting the 1% making waves*
+*Dedicated space supporting the 1% of women in tech who are breaking barriers*
 - Women-only networking events and meetups
 - Female mentor matching program
 - Career development workshops
