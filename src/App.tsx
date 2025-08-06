@@ -2,10 +2,8 @@
 import React from "react";
 import Header from "./components/Header";
 import AppRoutes from "./components/Routes";
-import Home from "./components/Home";
-import Login from "./components/Login";
-import Register from "./components/Register";
 import Sidebar from "./components/Sidebar";
+import Home from "./components/Home";
 
 // Main App component that renders the Header and Routes
 const App: React.FC = () => {
@@ -13,10 +11,9 @@ const App: React.FC = () => {
     <div>
       <Header />
       <AppRoutes />
-      <Home />
       <Sidebar />
-    
-
+      <Home />
+     
     </div>
   );
 };
