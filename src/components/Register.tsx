@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Form, Button, Container, Alert, Toast } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import VIcon from "../assets/V.svg";
+import { registerUser } from "../auth/api/auth"; // Expects (email, password)
 import logincss from "../styles/Login.module.css";
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [major, setMajor] = useState("");
+  const [graduationDate, setGraduationDate] = useState("");
+  const [role, setRole] = useState("student");
   const [error, setError] = useState<string | null>(null);
   const [showToast, setShowToast] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     document.body.classList.add(logincss["no-scroll"]);
@@ -24,28 +27,18 @@ const Login: React.FC = () => {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:8080/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      await registerUser(email, password, name, major, graduationDate, role);
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText || "Login failed");
-      }
+      // Optionally store extra user info for later use
+      
 
-      const token = await response.text();
-      localStorage.setItem("authToken", token);
-
-      // Show toast, then redirect after 2 seconds
       setShowToast(true);
+      // Redirect after 3 seconds
       setTimeout(() => {
-        navigate("/home");
-      }, 2000);
-
-    } catch (err: any) {
-      setError(err.message || "Unknown error");
+        window.location.href = "/login";
+      }, 3000);
+    } catch (error: any) {
+      setError(error.message || "Registration failed.");
     }
   };
 
@@ -62,25 +55,29 @@ const Login: React.FC = () => {
           textAlign: "center",
           width: "100%",
           maxWidth: "400px",
-          position: "relative",
+          position: "relative"
         }}
       >
-        <img
-          src={VIcon}
-          alt="V Icon"
-          width="80"
-          height="80"
-          className="mb-4"
-        />
-        <h2 className="text-white mb-4">Welcome to VaquerosInTech</h2>
+        <img src={VIcon} alt="V Icon" width="80" height="80" className="mb-4" />
+        <h2 className="text-white mb-4">Create your VaquerosInTech Account</h2>
 
         {error && <Alert variant="danger">{error}</Alert>}
 
         <Form onSubmit={handleSubmit}>
+          <Form.Group controlId="formName" className="mb-3">
+            <Form.Control
+              type="text"
+              placeholder="Full Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </Form.Group>
+
           <Form.Group controlId="formEmail" className="mb-3">
             <Form.Control
               type="email"
-              placeholder="Enter email"
+              placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -97,22 +94,46 @@ const Login: React.FC = () => {
             />
           </Form.Group>
 
-          <Button variant="light" type="submit" className="w-100 mb-3">
-            Login
-          </Button>
-          <Button
-            variant="outline-light"
-            className="w-100"
-            onClick={() => navigate("/register")}
+          <Form.Group controlId="formMajor" className="mb-3">
+            <Form.Control
+              type="text"
+              placeholder="Major"
+              value={major}
+              onChange={(e) => setMajor(e.target.value)}
+              required
+            />
+          </Form.Group>
+
+          <Form.Group controlId="formGraduationDate" className="mb-3">
+            <Form.Control
+              type="date"
+              value={graduationDate}
+              onChange={(e) => setGraduationDate(e.target.value)}
+              required
+            />
+          </Form.Group>
+
+          <Form.Select
+            value={role}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+              setRole(e.target.value)
+            }
+            required
+            className="mb-3"
           >
-            Create Account
+            <option value="student">Student</option>
+            <option value="alumni">Alumni</option>
+          </Form.Select>
+
+          <Button variant="light" type="submit" className="w-100">
+            Register
           </Button>
         </Form>
 
         <Toast
           onClose={() => setShowToast(false)}
           show={showToast}
-          delay={2000}
+          delay={3000}
           autohide
           style={{
             position: "absolute",
@@ -124,11 +145,11 @@ const Login: React.FC = () => {
           <Toast.Header>
             <strong className="me-auto">Success</strong>
           </Toast.Header>
-          <Toast.Body>Login successful! Redirecting...</Toast.Body>
+          <Toast.Body>Registration successful! Please login.</Toast.Body>
         </Toast>
       </div>
     </Container>
   );
 };
 
-export default Login;
+export default Register;
